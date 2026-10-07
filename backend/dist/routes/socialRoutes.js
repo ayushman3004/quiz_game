@@ -1,0 +1,15 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const express_1 = require("express");
+const socialController_1 = require("../controllers/socialController");
+const auth_1 = require("../middlewares/auth");
+const router = (0, express_1.Router)();
+router.get('/users/search', auth_1.authenticate, socialController_1.searchUsers);
+router.get('/friends', auth_1.authenticate, socialController_1.getFriends);
+router.post('/friends/request', auth_1.authenticate, socialController_1.sendFriendRequest);
+router.post('/friends/respond', auth_1.authenticate, socialController_1.respondFriendRequest);
+router.get('/clubs', auth_1.authenticate, socialController_1.getClubs);
+router.post('/clubs', auth_1.authenticate, socialController_1.createClub);
+router.post('/clubs/:id/join', auth_1.authenticate, socialController_1.joinClub);
+router.get('/leaderboards', auth_1.authenticate, socialController_1.getLeaderboards);
+exports.default = router;

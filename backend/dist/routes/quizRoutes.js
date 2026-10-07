@@ -1,0 +1,14 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const express_1 = require("express");
+const quizController_1 = require("../controllers/quizController");
+const auth_1 = require("../middlewares/auth");
+const router = (0, express_1.Router)();
+router.get('/', quizController_1.getQuizzes);
+router.get('/journey/tree', quizController_1.getJourneyTree);
+router.get('/daily-challenge', quizController_1.getDailyChallenge);
+router.get('/creators', quizController_1.getQuizMasters);
+router.get('/:id', quizController_1.getQuizById);
+router.get('/:id/play-solo', quizController_1.getSoloQuestions);
+router.post('/:id/submit-solo', auth_1.authenticate, quizController_1.submitSoloQuiz);
+exports.default = router;

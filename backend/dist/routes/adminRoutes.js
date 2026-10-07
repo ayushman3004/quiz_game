@@ -1,0 +1,14 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const express_1 = require("express");
+const adminController_1 = require("../controllers/adminController");
+const auth_1 = require("../middlewares/auth");
+const constants_1 = require("../constants");
+const router = (0, express_1.Router)();
+router.use(auth_1.authenticate);
+router.use((0, auth_1.requireRole)(constants_1.UserRole.ADMIN, constants_1.UserRole.MODERATOR));
+router.get('/stats', adminController_1.getAdminStats);
+router.get('/users', adminController_1.listUsersAdmin);
+router.patch('/users/:id/ban', adminController_1.toggleBanUser);
+router.patch('/quizzes/:id/approve', adminController_1.approveQuiz);
+exports.default = router;
