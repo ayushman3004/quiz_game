@@ -6,7 +6,11 @@ dotenv.config();
 const envSchema = z.object({
   PORT: z.string().default('5001'),
   NODE_ENV: z.enum(['development', 'production', 'test']).default('development'),
-  MONGODB_URI: z.string().default('mongodb://localhost:27017/quizapp'),
+  MONGODB_URI: z
+    .string()
+    .default(
+      'mongodb+srv://ayushmanrick007_db_user:ayushman2004@cluster0.pbvwe1r.mongodb.net/quizapp?retryWrites=true&w=majority'
+    ),
   REDIS_URL: z.string().default('redis://localhost:6379'),
   JWT_SECRET: z.string().default('super_secret_quiz_jwt_key_2026_change_in_production'),
   JWT_EXPIRES_IN: z.string().default('7d'),

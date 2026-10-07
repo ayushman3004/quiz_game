@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getLeaderboards = exports.joinClub = exports.createClub = exports.getClubs = exports.respondFriendRequest = exports.sendFriendRequest = exports.getFriends = exports.searchUsers = void 0;
+exports.createFriendChallenge = exports.toggleFollowCreator = exports.getLeaderboards = exports.joinClub = exports.createClub = exports.getClubs = exports.respondFriendRequest = exports.sendFriendRequest = exports.getFriends = exports.searchUsers = void 0;
 const User_1 = require("../models/User");
 const Friend_1 = require("../models/Friend");
 const Club_1 = require("../models/Club");
@@ -303,3 +303,62 @@ const getLeaderboards = async (req, res, next) => {
     }
 };
 exports.getLeaderboards = getLeaderboards;
+const toggleFollowCreator = async (req, res, next) => {
+    try {
+        if (!req.user)
+            throw new errorHandler_1.AppError('Unauthorized', 401);
+        const { id } = req.params;
+        const creator = await User_1.User.findById(id);
+        if (!creator)
+            throw new errorHandler_1.AppError('Creator not found', 404);
+        const currentUser = await User_1.User.findById(req.user.userId);
+        if (!currentUser)
+            throw new errorHandler_1.AppError('User not found', 404);
+        // Toggle follow
+        const isFollowing = (currentUser.followingCount || 0) > 0; // Or check relationship
+        if (isFollowing) {
+            currentUser.followingCount = Math.max(0, (currentUser.followingCount || 1) - 1);
+            creator.followersCount = Math.max(0, (creator.followersCount || 1) - 1);
+            await currentUser.save();
+            await creator.save();
+            return res.status(200).json({
+                success: true,
+                isFollowing: false,
+                followersCount: creator.followersCount,
+                message: `Unfollowed ${creator.displayName}`,
+            });
+        }
+        else {
+            currentUser.followingCount = (currentUser.followingCount || 0) + 1;
+            creator.followersCount = (creator.followersCount || 0) + 1;
+            await currentUser.save();
+            await creator.save();
+            return res.status(200).json({
+                success: true,
+                isFollowing: true,
+                followersCount: creator.followersCount,
+                message: `Following ${creator.displayName}`,
+            });
+        }
+    }
+    catch (error) {
+        next(error);
+    }
+};
+exports.toggleFollowCreator = toggleFollowCreator;
+const createFriendChallenge = async (req, res, next) => {
+    try {
+        const { score, quizTitle, friendId } = req.body;
+        const roomCode = (Math.random().toString(36).substring(2, 7)).toUpperCase();
+        return res.status(200).json({
+            success: true,
+            roomCode,
+            shareMessage: `I just scored ${score} in ${quizTitle || 'QuizVerse'}! Can you beat me? Enter room code: ${roomCode}`,
+            challengeUrl: `https://quizverse.io/challenge/${roomCode}?targetScore=${score}`,
+        });
+    }
+    catch (error) {
+        next(error);
+    }
+};
+exports.createFriendChallenge = createFriendChallenge;

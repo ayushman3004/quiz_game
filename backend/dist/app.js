@@ -17,6 +17,7 @@ const govtExamRoutes_1 = __importDefault(require("./routes/govtExamRoutes"));
 const socialRoutes_1 = __importDefault(require("./routes/socialRoutes"));
 const aiRoutes_1 = __importDefault(require("./routes/aiRoutes"));
 const adminRoutes_1 = __importDefault(require("./routes/adminRoutes"));
+const tournamentRoutes_1 = __importDefault(require("./routes/tournamentRoutes"));
 const createApp = () => {
     const app = (0, express_1.default)();
     app.use((0, helmet_1.default)());
@@ -43,6 +44,7 @@ const createApp = () => {
     app.use('/api/quizzes', quizRoutes_1.default);
     app.use('/api/govt-exams', govtExamRoutes_1.default);
     app.use('/api/social', socialRoutes_1.default);
+    app.use('/api/tournaments', tournamentRoutes_1.default);
     app.use('/api/ai', aiRoutes_1.default);
     app.use('/api/admin', adminRoutes_1.default);
     // Global Error Handler

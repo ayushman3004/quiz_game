@@ -7,18 +7,19 @@ exports.connectDB = void 0;
 const mongoose_1 = __importDefault(require("mongoose"));
 const env_1 = require("./env");
 const connectDB = async () => {
+    if (mongoose_1.default.connection.readyState >= 1) {
+        return;
+    }
     try {
         const conn = await mongoose_1.default.connect(env_1.env.MONGODB_URI, {
             autoIndex: true,
+            serverSelectionTimeoutMS: 10000,
         });
-        console.log(`✅ MongoDB Connected: ${conn.connection.host}`);
+        console.log(`✅ MongoDB Connected: ${conn.connection.host} (Database: ${conn.connection.name})`);
     }
     catch (error) {
         console.error(`❌ MongoDB Connection Error: ${error.message}`);
-        // Don't crash immediately in dev mode if mongo isn't started yet, allow app to log warnings
-        if (env_1.env.NODE_ENV === 'production') {
-            process.exit(1);
-        }
+        throw error;
     }
 };
 exports.connectDB = connectDB;

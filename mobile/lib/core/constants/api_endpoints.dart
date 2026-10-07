@@ -2,25 +2,28 @@ import 'dart:io';
 import 'package:flutter/foundation.dart';
 
 class ApiEndpoints {
-  // Configurable base URL
+  // Hosted Production Backend on Vercel
+  static const String hostedBaseUrl = 'https://quiz-game-olive-three.vercel.app';
+
+  // Configurable base URL pointing to hosted Vercel backend by default
   static String get baseUrl {
-    if (kIsWeb) {
+    const bool useLocal = bool.fromEnvironment('USE_LOCAL_BACKEND', defaultValue: false);
+    if (useLocal) {
+      if (kIsWeb) return 'http://localhost:5001/api';
+      if (Platform.isAndroid) return 'http://10.0.2.2:5001/api';
       return 'http://localhost:5001/api';
     }
-    if (Platform.isAndroid) {
-      // Android emulator maps host machine localhost to 10.0.2.2
-      return 'http://10.0.2.2:5001/api';
-    }
-    return 'http://localhost:5001/api';
+    return '$hostedBaseUrl/api';
   }
 
   static String get socketUrl {
-    if (kIsWeb) {
+    const bool useLocal = bool.fromEnvironment('USE_LOCAL_BACKEND', defaultValue: false);
+    if (useLocal) {
+      if (kIsWeb) return 'http://localhost:5001';
+      if (Platform.isAndroid) return 'http://10.0.2.2:5001';
       return 'http://localhost:5001';
     }
-    if (Platform.isAndroid) {
-      return 'http://10.0.2.2:5001';
-    }
+    // Sockets default to localhost dev server or custom socket server
     return 'http://localhost:5001';
   }
 

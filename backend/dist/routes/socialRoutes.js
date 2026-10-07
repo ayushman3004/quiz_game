@@ -8,6 +8,8 @@ router.get('/users/search', auth_1.authenticate, socialController_1.searchUsers)
 router.get('/friends', auth_1.authenticate, socialController_1.getFriends);
 router.post('/friends/request', auth_1.authenticate, socialController_1.sendFriendRequest);
 router.post('/friends/respond', auth_1.authenticate, socialController_1.respondFriendRequest);
+router.post('/creators/:id/follow', auth_1.authenticate, socialController_1.toggleFollowCreator);
+router.post('/challenge', auth_1.authenticate, socialController_1.createFriendChallenge);
 router.get('/clubs', auth_1.authenticate, socialController_1.getClubs);
 router.post('/clubs', auth_1.authenticate, socialController_1.createClub);
 router.post('/clubs/:id/join', auth_1.authenticate, socialController_1.joinClub);
