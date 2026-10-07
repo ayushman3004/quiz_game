@@ -112,6 +112,7 @@ class UserModel {
   final int nextLevelXp;
   final int followersCount;
   final int followingCount;
+  final int publishedQuizzesCount;
   final UserStats stats;
   final PlayerArchetype archetype;
   final List<PlayerAchievement> achievements;
@@ -133,6 +134,7 @@ class UserModel {
     this.nextLevelXp = 100,
     this.followersCount = 0,
     this.followingCount = 0,
+    this.publishedQuizzesCount = 0,
     UserStats? stats,
     PlayerArchetype? archetype,
     List<PlayerAchievement>? achievements,
@@ -164,6 +166,7 @@ class UserModel {
       nextLevelXp: json['nextLevelXp'] ?? 100,
       followersCount: json['followersCount'] ?? 0,
       followingCount: json['followingCount'] ?? 0,
+      publishedQuizzesCount: json['publishedQuizzesCount'] ?? 0,
       stats: UserStats.fromJson(json['stats']),
       archetype: PlayerArchetype.fromJson(json['archetype']),
       achievements: (json['achievements'] as List?)
@@ -190,6 +193,7 @@ class UserModel {
         'nextLevelXp': nextLevelXp,
         'followersCount': followersCount,
         'followingCount': followingCount,
+        'publishedQuizzesCount': publishedQuizzesCount,
         'stats': stats.toJson(),
       };
 }
