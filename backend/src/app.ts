@@ -2,6 +2,8 @@ import express, { Express } from 'express';
 import cors from 'cors';
 import helmet from 'helmet';
 import morgan from 'morgan';
+import path from 'path';
+import fs from 'fs';
 import { env } from './config/env';
 import { errorHandler } from './middlewares/errorHandler';
 
@@ -41,8 +43,20 @@ export const createApp = (): Express => {
   });
 
   // Root status and welcome endpoint
-  app.get(['/', '/api'], (_req, res) => {
-    res.status(200).json({
+  app.get(['/', '/api'], (req, res) => {
+    if (req.accepts('html')) {
+      const candidates = [
+        path.join(__dirname, '../public/index.html'),
+        path.join(process.cwd(), 'public/index.html'),
+        path.join(process.cwd(), 'backend/public/index.html'),
+      ];
+      for (const p of candidates) {
+        if (fs.existsSync(p)) {
+          return res.sendFile(p);
+        }
+      }
+    }
+    return res.status(200).json({
       name: 'QuizVerse API',
       status: 'healthy',
       version: '1.0.0',

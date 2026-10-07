@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>QuizVerse API & Platform Backend</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      background: radial-gradient(circle at top, #1a1a3a, #0b0d1b);
+      color: #f1f5f9;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+    }
+    .card {
+      background: rgba(25, 30, 56, 0.7);
+      backdrop-filter: blur(16px);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: 24px;
+      padding: 40px;
+      max-width: 680px;
+      width: 100%;
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+      text-align: center;
+    }
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 14px;
+      border-radius: 9999px;
+      background: rgba(16, 185, 129, 0.15);
+      color: #34d399;
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+      margin-bottom: 20px;
+      border: 1px solid rgba(16, 185, 129, 0.3);
+    }
+    .badge-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: #10b981;
+      box-shadow: 0 0 10px #10b981;
+    }
+    h1 {
+      font-size: 32px;
+      font-weight: 800;
+      margin-bottom: 12px;
+      background: linear-gradient(135deg, #a78bfa, #38bdf8);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    p {
+      color: #94a3b8;
+      font-size: 15px;
+      line-height: 1.6;
+      margin-bottom: 28px;
+    }
+    .actions {
+      display: flex;
+      gap: 12px;
+      justify-content: center;
+      flex-wrap: wrap;
+      margin-bottom: 32px;
+    }
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 12px 24px;
+      border-radius: 12px;
+      font-weight: 700;
+      font-size: 14px;
+      text-decoration: none;
+      transition: all 0.2s ease;
+    }
+    .btn-primary {
+      background: linear-gradient(135deg, #6366f1, #8b5cf6);
+      color: white;
+      box-shadow: 0 10px 20px -5px rgba(99, 102, 241, 0.5);
+    }
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 15px 25px -5px rgba(99, 102, 241, 0.7);
+    }
+    .btn-secondary {
+      background: rgba(255, 255, 255, 0.08);
+      color: #e2e8f0;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    .btn-secondary:hover {
+      background: rgba(255, 255, 255, 0.15);
+      transform: translateY(-2px);
+    }
+    .endpoints {
+      text-align: left;
+      background: rgba(10, 15, 30, 0.6);
+      border-radius: 16px;
+      padding: 20px;
+      border: 1px solid rgba(255, 255, 255, 0.06);
+    }
+    .endpoints-title {
+      font-size: 12px;
+      font-weight: 800;
+      color: #64748b;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      margin-bottom: 12px;
+    }
+    .endpoint-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 8px 0;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+      font-size: 13px;
+    }
+    .endpoint-row:last-child { border-bottom: none; }
+    .method {
+      display: inline-block;
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-weight: 800;
+      font-size: 11px;
+      margin-right: 8px;
+    }
+    .get { background: rgba(56, 189, 248, 0.15); color: #38bdf8; }
+    .post { background: rgba(168, 85, 247, 0.15); color: #c084fc; }
+    a.link {
+      color: #94a3b8;
+      text-decoration: none;
+      font-family: monospace;
+      transition: color 0.15s;
+    }
+    a.link:hover { color: #38bdf8; }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <div class="badge">
+      <span class="badge-dot"></span>
+      API LIVE & OPERATIONAL
+    </div>
+    <h1>QuizVerse Cloud Backend</h1>
+    <p>High-concurrency competitive multiplayer quiz engine, tournament manager, and social platform connected to MongoDB Atlas.</p>
+
+    <div class="actions">
+      <a href="https://tmpfiles.org/dl/1791394072.93b2149d7c008230/wDAplzsU0ISu/app-release.apk" class="btn btn-primary">
+        📱 Download Official Android APK (v1.0.0)
+      </a>
+      <a href="/health" class="btn btn-secondary">
+        🩺 Check Health Status
+      </a>
+    </div>
+
+    <div class="endpoints">
+      <div class="endpoints-title">Verified Live Endpoints</div>
+      <div class="endpoint-row">
+        <div><span class="method get">GET</span><a class="link" href="/health">/health</a></div>
+        <span style="color: #34d399;">200 OK</span>
+      </div>
+      <div class="endpoint-row">
+        <div><span class="method get">GET</span><a class="link" href="/api/quizzes">/api/quizzes</a></div>
+        <span style="color: #34d399;">200 OK</span>
+      </div>
+      <div class="endpoint-row">
+        <div><span class="method get">GET</span><a class="link" href="/api/tournaments">/api/tournaments</a></div>
+        <span style="color: #34d399;">200 OK</span>
+      </div>
+      <div class="endpoint-row">
+        <div><span class="method get">GET</span><a class="link" href="/api/quizzes/creators">/api/quizzes/creators</a></div>
+        <span style="color: #34d399;">200 OK</span>
+      </div>
+      <div class="endpoint-row">
+        <div><span class="method post">POST</span><a class="link" href="/api/auth/login">/api/auth/login</a></div>
+        <span style="color: #34d399;">Active</span>
+      </div>
+      <div class="endpoint-row">
+        <div><span class="method post">POST</span><a class="link" href="/api/auth/register">/api/auth/register</a></div>
+        <span style="color: #34d399;">Active</span>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

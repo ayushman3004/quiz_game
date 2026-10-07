@@ -8,6 +8,8 @@ const express_1 = __importDefault(require("express"));
 const cors_1 = __importDefault(require("cors"));
 const helmet_1 = __importDefault(require("helmet"));
 const morgan_1 = __importDefault(require("morgan"));
+const path_1 = __importDefault(require("path"));
+const fs_1 = __importDefault(require("fs"));
 const env_1 = require("./config/env");
 const errorHandler_1 = require("./middlewares/errorHandler");
 const authRoutes_1 = __importDefault(require("./routes/authRoutes"));
@@ -39,8 +41,20 @@ const createApp = () => {
         });
     });
     // Root status and welcome endpoint
-    app.get(['/', '/api'], (_req, res) => {
-        res.status(200).json({
+    app.get(['/', '/api'], (req, res) => {
+        if (req.accepts('html')) {
+            const candidates = [
+                path_1.default.join(__dirname, '../public/index.html'),
+                path_1.default.join(process.cwd(), 'public/index.html'),
+                path_1.default.join(process.cwd(), 'backend/public/index.html'),
+            ];
+            for (const p of candidates) {
+                if (fs_1.default.existsSync(p)) {
+                    return res.sendFile(p);
+                }
+            }
+        }
+        return res.status(200).json({
             name: 'QuizVerse API',
             status: 'healthy',
             version: '1.0.0',
