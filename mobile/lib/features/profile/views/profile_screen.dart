@@ -89,6 +89,50 @@ class ProfileScreen extends ConsumerWidget {
                         StatChip(type: StatType.rating, value: '${user.rating}'),
                       ],
                     ),
+                    const SizedBox(height: 14),
+
+                    // PRD Section 46: Player Archetype Badge
+                    Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
+                      decoration: BoxDecoration(
+                        gradient: AppColors.primaryGradient,
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Text(user.archetype.icon, style: const TextStyle(fontSize: 16)),
+                          const SizedBox(width: 6),
+                          Text(
+                            '${user.archetype.name.toUpperCase()} ARCHETYPE',
+                            style: const TextStyle(fontWeight: FontWeight.w900, fontSize: 12, color: Colors.white, letterSpacing: 1.0),
+                          ),
+                          const SizedBox(width: 6),
+                          Text('• ${user.archetype.label}', style: const TextStyle(fontSize: 11, color: Colors.white70)),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              const SizedBox(height: 20),
+
+              // PRD Section 41: Achievements & Badges Tray
+              const Text(
+                'ACHIEVEMENTS & BADGES',
+                style: TextStyle(fontSize: 12, fontWeight: FontWeight.w800, letterSpacing: 1.2, color: AppColors.textMuted),
+              ),
+              const SizedBox(height: 10),
+              SingleChildScrollView(
+                scrollDirection: Axis.horizontal,
+                child: Row(
+                  children: [
+                    _buildAchievementBadge('First Victory', '🏆', true, 'Won match'),
+                    _buildAchievementBadge('Speed Demon', '⚡', user.stats.avgResponseTimeMs <= 2500 && user.stats.totalQuestionsAnswered >= 4, '< 2.5s answer'),
+                    _buildAchievementBadge('Streak Master', '🔥', user.currentStreak >= 7, '7+ day streak'),
+                    _buildAchievementBadge('Polymath', '🧠', user.stats.correctAnswers >= 50, '50+ correct'),
+                    _buildAchievementBadge('Quiz Architect', '🏛️', user.publishedQuizzesCount > 0, 'Created quiz'),
+                    _buildAchievementBadge('Tournament Pro', '🥇', user.rating >= 1600, 'Rating 1600+'),
                   ],
                 ),
               ),
@@ -127,10 +171,10 @@ class ProfileScreen extends ConsumerWidget {
                       ),
                     ),
                     const SizedBox(height: 12),
-                    _buildTopicBar('Data Structures & Algorithms', 0.90, '90%', AppColors.primary),
-                    _buildTopicBar('Database Management (DBMS)', 0.80, '80%', AppColors.accentEmerald),
-                    _buildTopicBar('Operating Systems (OS)', 0.60, '60%', AppColors.accentAmber),
-                    _buildTopicBar('Computer Networks', 0.75, '75%', AppColors.accentCyan),
+                    _buildTopicBar('Economics: Monetary Policy', 0.90, '90%', AppColors.accentAmber),
+                    _buildTopicBar('Computer Science: Algorithms', 0.85, '85%', AppColors.primary),
+                    _buildTopicBar('Quantitative Aptitude', 0.70, '70%', AppColors.accentEmerald),
+                    _buildTopicBar('Indian Polity & UPSC', 0.75, '75%', AppColors.accentCyan),
                   ],
                 ),
               ),
@@ -142,9 +186,9 @@ class ProfileScreen extends ConsumerWidget {
                 style: TextStyle(fontSize: 12, fontWeight: FontWeight.w800, letterSpacing: 1.2, color: AppColors.textMuted),
               ),
               const SizedBox(height: 10),
-              _buildHistoryCard('GATE CS: Algorithms 1v1', 'Rank #1 • Won against Rahul', '+150 XP', '+25 ELO', true),
-              _buildHistoryCard('Quantitative Speed Drill', 'Rank #2 • Won against Simran', '+110 XP', '+10 ELO', true),
-              _buildHistoryCard('Operating Systems Mock', 'Rank #3 • 4-Player Match', '+60 XP', '-15 ELO', false),
+              _buildHistoryCard('Economics: Monetary Policy 1v1', 'Rank #1 • Won against Rahul', '+150 XP', '+25 ELO', true),
+              _buildHistoryCard('GATE CS: Algorithms Drill', 'Rank #1 • Won against Simran', '+130 XP', '+18 ELO', true),
+              _buildHistoryCard('UPSC Prelims Mock', 'Rank #2 • 4-Player Match', '+60 XP', '-10 ELO', false),
               const SizedBox(height: 20),
 
               // Sign out button
@@ -234,6 +278,45 @@ class ProfileScreen extends ConsumerWidget {
                 Text(xp, style: const TextStyle(fontWeight: FontWeight.w800, fontSize: 12.5, color: AppColors.primaryLight)),
                 Text(elo, style: TextStyle(fontWeight: FontWeight.w700, fontSize: 11, color: isWin ? AppColors.accentEmerald : AppColors.accentRose)),
               ],
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildAchievementBadge(String name, String icon, bool isUnlocked, String req) {
+    return Container(
+      width: 100,
+      margin: const EdgeInsets.only(right: 12),
+      child: GlassCard(
+        padding: const EdgeInsets.all(12),
+        backgroundColor: isUnlocked ? AppColors.surfaceDarkElevated : Colors.black38,
+        borderColor: isUnlocked ? AppColors.accentAmber.withOpacity(0.4) : AppColors.borderGlass,
+        child: Column(
+          children: [
+            Text(icon, style: TextStyle(fontSize: 26, color: isUnlocked ? null : Colors.grey)),
+            const SizedBox(height: 6),
+            Text(
+              name,
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+              style: TextStyle(
+                fontWeight: FontWeight.w700,
+                fontSize: 11.5,
+                color: isUnlocked ? AppColors.textLight : AppColors.textMuted,
+              ),
+            ),
+            const SizedBox(height: 2),
+            Text(
+              isUnlocked ? 'Unlocked' : req,
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+              style: TextStyle(
+                fontSize: 10,
+                fontWeight: FontWeight.w600,
+                color: isUnlocked ? AppColors.accentEmerald : AppColors.textMuted,
+              ),
             ),
           ],
         ),

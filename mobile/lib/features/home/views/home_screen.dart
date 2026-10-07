@@ -116,6 +116,12 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                       ),
                     ),
                     StreakBadge(streakDays: user.currentStreak > 0 ? user.currentStreak : 7),
+                    const SizedBox(width: 8),
+                    IconButton(
+                      icon: const Icon(Icons.leaderboard_rounded, color: AppColors.accentAmber, size: 22),
+                      tooltip: 'Leaderboard',
+                      onPressed: () => context.push('/leaderboard'),
+                    ),
                   ],
                 ),
                 const SizedBox(height: 16),
@@ -280,6 +286,75 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                       ),
                     ],
                   ),
+                ),
+                const SizedBox(height: 20),
+
+                // PRD Section 29 & 36: Ecosystem Hubs (Quiz Masters & Tournaments)
+                Row(
+                  children: [
+                    // Quiz Masters Card
+                    Expanded(
+                      child: GlassCard(
+                        padding: const EdgeInsets.all(16),
+                        onTap: () => context.push('/creators'),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Container(
+                              padding: const EdgeInsets.all(8),
+                              decoration: BoxDecoration(
+                                color: AppColors.primary.withOpacity(0.2),
+                                borderRadius: BorderRadius.circular(10),
+                              ),
+                              child: const Icon(Icons.psychology, color: AppColors.primaryLight, size: 22),
+                            ),
+                            const SizedBox(height: 12),
+                            const Text(
+                              'Quiz Masters',
+                              style: TextStyle(fontWeight: FontWeight.w800, fontSize: 14.5, color: AppColors.textLight),
+                            ),
+                            const SizedBox(height: 2),
+                            const Text(
+                              'Top authors & mentors',
+                              style: TextStyle(fontSize: 11, color: AppColors.textMuted),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                    const SizedBox(width: 12),
+
+                    // Tournaments Card
+                    Expanded(
+                      child: GlassCard(
+                        padding: const EdgeInsets.all(16),
+                        onTap: () => context.push('/tournaments'),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Container(
+                              padding: const EdgeInsets.all(8),
+                              decoration: BoxDecoration(
+                                color: AppColors.accentAmber.withOpacity(0.2),
+                                borderRadius: BorderRadius.circular(10),
+                              ),
+                              child: const Icon(Icons.emoji_events, color: AppColors.accentAmber, size: 22),
+                            ),
+                            const SizedBox(height: 12),
+                            const Text(
+                              'Tournaments',
+                              style: TextStyle(fontWeight: FontWeight.w800, fontSize: 14.5, color: AppColors.textLight),
+                            ),
+                            const SizedBox(height: 2),
+                            const Text(
+                              'Daily sprint cups',
+                              style: TextStyle(fontSize: 11, color: AppColors.textMuted),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
                 const SizedBox(height: 24),
 

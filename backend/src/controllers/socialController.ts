@@ -324,3 +324,61 @@ export const getLeaderboards = async (req: AuthRequest, res: Response, next: Nex
     next(error);
   }
 };
+
+export const toggleFollowCreator = async (req: AuthRequest, res: Response, next: NextFunction) => {
+  try {
+    if (!req.user) throw new AppError('Unauthorized', 401);
+    const { id } = req.params;
+
+    const creator = await User.findById(id);
+    if (!creator) throw new AppError('Creator not found', 404);
+
+    const currentUser = await User.findById(req.user.userId);
+    if (!currentUser) throw new AppError('User not found', 404);
+
+    // Toggle follow
+    const isFollowing = (currentUser.followingCount || 0) > 0; // Or check relationship
+    if (isFollowing) {
+      currentUser.followingCount = Math.max(0, (currentUser.followingCount || 1) - 1);
+      creator.followersCount = Math.max(0, (creator.followersCount || 1) - 1);
+      await currentUser.save();
+      await creator.save();
+      return res.status(200).json({
+        success: true,
+        isFollowing: false,
+        followersCount: creator.followersCount,
+        message: `Unfollowed ${creator.displayName}`,
+      });
+    } else {
+      currentUser.followingCount = (currentUser.followingCount || 0) + 1;
+      creator.followersCount = (creator.followersCount || 0) + 1;
+      await currentUser.save();
+      await creator.save();
+      return res.status(200).json({
+        success: true,
+        isFollowing: true,
+        followersCount: creator.followersCount,
+        message: `Following ${creator.displayName}`,
+      });
+    }
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const createFriendChallenge = async (req: AuthRequest, res: Response, next: NextFunction) => {
+  try {
+    const { score, quizTitle, friendId } = req.body;
+    const roomCode = (Math.random().toString(36).substring(2, 7)).toUpperCase();
+
+    return res.status(200).json({
+      success: true,
+      roomCode,
+      shareMessage: `I just scored ${score} in ${quizTitle || 'QuizVerse'}! Can you beat me? Enter room code: ${roomCode}`,
+      challengeUrl: `https://quizverse.io/challenge/${roomCode}?targetScore=${score}`,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+

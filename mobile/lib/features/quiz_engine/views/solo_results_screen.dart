@@ -146,6 +146,144 @@ class SoloResultsScreen extends StatelessWidget {
                   ],
                 ),
               ),
+              const SizedBox(height: 16),
+
+              // PRD Section 40: Friend Challenge Card
+              GlassCard(
+                gradient: const LinearGradient(
+                  colors: [Color(0xFF311042), Color(0xFF13091E)],
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                ),
+                borderColor: AppColors.accentFlame.withOpacity(0.4),
+                padding: const EdgeInsets.all(16),
+                child: Row(
+                  children: [
+                    Container(
+                      padding: const EdgeInsets.all(10),
+                      decoration: BoxDecoration(
+                        color: AppColors.accentFlame.withOpacity(0.2),
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      child: const Icon(Icons.flash_on_rounded, color: AppColors.accentFlame, size: 24),
+                    ),
+                    const SizedBox(width: 14),
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          const Text(
+                            'CAN YOUR FRIEND BEAT YOU?',
+                            style: TextStyle(
+                              fontSize: 11,
+                              fontWeight: FontWeight.w900,
+                              letterSpacing: 1.2,
+                              color: AppColors.accentFlame,
+                            ),
+                          ),
+                          const SizedBox(height: 2),
+                          Text(
+                            'Challenge friends with your score of ${result.score} pts',
+                            style: const TextStyle(fontSize: 12, color: AppColors.textLight),
+                          ),
+                        ],
+                      ),
+                    ),
+                    ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: AppColors.accentFlame,
+                        foregroundColor: Colors.white,
+                        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                      ),
+                      onPressed: () {
+                        final code = (DateTime.now().millisecondsSinceEpoch % 1000000).toRadixString(36).toUpperCase();
+                        showDialog(
+                          context: context,
+                          builder: (ctx) => AlertDialog(
+                            backgroundColor: AppColors.surfaceDark,
+                            title: const Text('⚔ Friend Challenge Link'),
+                            content: Column(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Text(
+                                  'Share room code with your friends to see if they can beat ${result.score} pts!',
+                                  style: const TextStyle(color: AppColors.textMuted, fontSize: 13),
+                                ),
+                                const SizedBox(height: 16),
+                                Container(
+                                  padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+                                  decoration: BoxDecoration(
+                                    color: Colors.black45,
+                                    borderRadius: BorderRadius.circular(12),
+                                    border: Border.all(color: AppColors.accentFlame),
+                                  ),
+                                  child: Text(
+                                    code,
+                                    style: const TextStyle(
+                                      fontSize: 26,
+                                      fontWeight: FontWeight.w900,
+                                      letterSpacing: 4,
+                                      color: AppColors.accentFlame,
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                            actions: [
+                              TextButton(
+                                onPressed: () => Navigator.pop(ctx),
+                                child: const Text('Close'),
+                              ),
+                              ElevatedButton(
+                                style: ElevatedButton.styleFrom(backgroundColor: AppColors.accentFlame),
+                                onPressed: () {
+                                  Navigator.pop(ctx);
+                                  context.push('/compete/lobby/$code');
+                                },
+                                child: const Text('Enter Lobby'),
+                              ),
+                            ],
+                          ),
+                        );
+                      },
+                      child: const Text('Challenge', style: TextStyle(fontWeight: FontWeight.w800, fontSize: 12)),
+                    ),
+                  ],
+                ),
+              ),
+              const SizedBox(height: 12),
+
+              // PRD Section 61: Learning Loop (Weak Area Diagnostic)
+              if (result.wrongCount > 0)
+                GlassCard(
+                  padding: const EdgeInsets.all(14),
+                  child: Row(
+                    children: [
+                      const Icon(Icons.lightbulb_rounded, color: AppColors.accentAmber, size: 22),
+                      const SizedBox(width: 12),
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            const Text(
+                              'Weak Area Identified',
+                              style: TextStyle(fontWeight: FontWeight.w700, fontSize: 13, color: AppColors.textLight),
+                            ),
+                            Text(
+                              'Review the ${result.wrongCount} missed questions in Journey mode to master this topic.',
+                              style: const TextStyle(fontSize: 11, color: AppColors.textMuted),
+                            ),
+                          ],
+                        ),
+                      ),
+                      TextButton(
+                        onPressed: () => context.go('/journey'),
+                        child: const Text('Practice →', style: TextStyle(color: AppColors.accentCyan, fontWeight: FontWeight.w700)),
+                      ),
+                    ],
+                  ),
+                ),
 
               const Spacer(),
 
@@ -154,13 +292,13 @@ class SoloResultsScreen extends StatelessWidget {
                 text: 'Back to Home',
                 onPressed: () => context.go('/home'),
               ),
-              const SizedBox(height: 12),
+              const SizedBox(height: 10),
               AppButton(
-                text: 'Continue Journey',
+                text: 'Continue Journey Track',
                 isSecondary: true,
                 onPressed: () => context.go('/journey'),
               ),
-              const SizedBox(height: 12),
+              const SizedBox(height: 10),
             ],
           ),
         ),

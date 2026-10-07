@@ -56,4 +56,13 @@ class ApiEndpoints {
 
   // AI
   static const String generateQuiz = '/ai/generate-quiz';
+
+  // Quiz Masters & Creators
+  static const String creators = '/quizzes/creators';
+  static String followCreator(String id) => '/social/creators/$id/follow';
+  static const String friendChallenge = '/social/challenge';
+
+  // Tournaments (PRD Section 36)
+  static const String tournaments = '/tournaments';
+  static String registerTournament(String id) => '/tournaments/$id/register';
 }

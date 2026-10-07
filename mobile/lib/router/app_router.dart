@@ -14,6 +14,8 @@ import '../features/compete/views/live_arena_screen.dart';
 import '../features/quiz_engine/views/solo_quiz_screen.dart';
 import '../features/govt_arena/views/govt_arena_screen.dart';
 import '../features/creator/views/quiz_creator_screen.dart';
+import '../features/creator/views/quiz_masters_screen.dart';
+import '../features/compete/views/tournaments_screen.dart';
 import '../features/social/views/social_screen.dart';
 import '../features/social/views/leaderboard_screen.dart';
 import '../features/profile/views/profile_screen.dart';
@@ -92,6 +94,14 @@ final appRouterProvider = Provider<GoRouter>((ref) {
       GoRoute(
         path: '/creator/new',
         builder: (context, state) => const QuizCreatorScreen(),
+      ),
+      GoRoute(
+        path: '/creators',
+        builder: (context, state) => const QuizMastersScreen(),
+      ),
+      GoRoute(
+        path: '/tournaments',
+        builder: (context, state) => const TournamentsScreen(),
       ),
       GoRoute(
         path: '/social',

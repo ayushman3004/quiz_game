@@ -210,6 +210,68 @@ export const getMe = async (req: AuthRequest, res: Response, next: NextFunction)
       Math.max(0, Math.round(((user.xp - currentLevelBaseXp) / (nextLevelXp - currentLevelBaseXp)) * 100))
     );
 
+    // Dynamic archetype per PRD Section 46
+    const totalQ = user.stats.totalQuestionsAnswered || 0;
+    const accuracy = totalQ > 0 ? (user.stats.correctAnswers / totalQ) * 100 : 0;
+    const avgSpeed = user.stats.avgResponseTimeMs || 0;
+    const winRate = user.stats.gamesPlayed > 0 ? (user.stats.gamesWon / user.stats.gamesPlayed) * 100 : 0;
+
+    let archetype = { name: 'Specialist', label: 'Focused Competitor', icon: '🔬', description: 'Dominates specialized high-yield drills.' };
+    if (avgSpeed > 0 && avgSpeed <= 2500 && accuracy >= 70) {
+      archetype = { name: 'Speedster', label: 'Lightning Instincts', icon: '⚡', description: 'Answers with unmatched reflexes and rapid precision.' };
+    } else if (accuracy >= 80 && totalQ >= 10) {
+      archetype = { name: 'Strategist', label: 'High Accuracy Tactician', icon: '🎯', description: 'Calculates every choice with pinpoint accuracy.' };
+    } else if (winRate >= 65 && user.stats.gamesPlayed >= 5) {
+      archetype = { name: 'Clutcher', label: 'Comeback Victor', icon: '👑', description: 'Excels under tournament pressure in clutch moments.' };
+    } else if (totalQ >= 50) {
+      archetype = { name: 'Scholar', label: 'Multi-Discipline Mind', icon: '📚', description: 'Vast knowledge breadth across multiple subject tracks.' };
+    }
+
+    const achievements = [
+      {
+        id: 'first_victory',
+        name: 'First Victory',
+        description: 'Win your first competitive match',
+        icon: '🏆',
+        isUnlocked: (user.stats.gamesWon || 0) >= 1,
+      },
+      {
+        id: 'speed_demon',
+        name: 'Speed Demon',
+        description: 'Average response under 2.5s',
+        icon: '⚡',
+        isUnlocked: avgSpeed > 0 && avgSpeed <= 2500 && totalQ >= 4,
+      },
+      {
+        id: 'streak_master',
+        name: 'Streak Master',
+        description: 'Maintain a 7+ day active streak',
+        icon: '🔥',
+        isUnlocked: (user.currentStreak || 0) >= 7 || (user.longestStreak || 0) >= 7,
+      },
+      {
+        id: 'polymath',
+        name: 'Polymath',
+        description: 'Answer 50+ questions correctly',
+        icon: '🧠',
+        isUnlocked: (user.stats.correctAnswers || 0) >= 50,
+      },
+      {
+        id: 'quiz_architect',
+        name: 'Quiz Architect',
+        description: 'Publish verified quizzes',
+        icon: '🏛️',
+        isUnlocked: (user.publishedQuizzesCount || 0) >= 1,
+      },
+      {
+        id: 'tournament_champ',
+        name: 'Tournament Contender',
+        description: 'Achieve 1600+ Competitive Rating',
+        icon: '🥇',
+        isUnlocked: (user.rating || 0) >= 1600,
+      },
+    ];
+
     return res.status(200).json({
       success: true,
       user: {
@@ -225,7 +287,11 @@ export const getMe = async (req: AuthRequest, res: Response, next: NextFunction)
         currentStreak: user.currentStreak,
         longestStreak: user.longestStreak,
         rating: user.rating,
+        followersCount: user.followersCount || 0,
+        followingCount: user.followingCount || 0,
         stats: user.stats,
+        archetype,
+        achievements,
         xpProgress,
         nextLevelXp,
       },

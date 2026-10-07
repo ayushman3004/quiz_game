@@ -232,7 +232,50 @@ class _CompeteScreenState extends ConsumerState<CompeteScreen> {
                   ],
                 ),
               ),
-              const SizedBox(height: 20),
+              const SizedBox(height: 16),
+
+              // Tournaments Banner (PRD Section 36)
+              GlassCard(
+                gradient: AppColors.goldGradient,
+                padding: const EdgeInsets.all(18),
+                onTap: () => context.push('/tournaments'),
+                child: Row(
+                  children: [
+                    Container(
+                      padding: const EdgeInsets.all(10),
+                      decoration: BoxDecoration(
+                        color: Colors.black26,
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      child: const Icon(Icons.emoji_events_rounded, color: Colors.black87, size: 28),
+                    ),
+                    const SizedBox(width: 14),
+                    const Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            'TOURNAMENTS HUB',
+                            style: TextStyle(fontSize: 11, fontWeight: FontWeight.w900, letterSpacing: 1.2, color: Colors.black87),
+                          ),
+                          SizedBox(height: 2),
+                          Text(
+                            'Daily Sprint & Grand Slam Cups',
+                            style: TextStyle(fontWeight: FontWeight.w800, fontSize: 14.5, color: Colors.black),
+                          ),
+                          SizedBox(height: 2),
+                          Text(
+                            '50,000 Coin Prize Pools • Bracket Knockouts',
+                            style: TextStyle(fontSize: 11.5, color: Colors.black54, fontWeight: FontWeight.w600),
+                          ),
+                        ],
+                      ),
+                    ),
+                    const Icon(Icons.arrow_forward_ios, color: Colors.black54, size: 16),
+                  ],
+                ),
+              ),
+              const SizedBox(height: 16),
 
               // Secondary Modes Grid
               Row(

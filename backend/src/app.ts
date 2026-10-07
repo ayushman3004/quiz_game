@@ -12,6 +12,7 @@ import govtExamRoutes from './routes/govtExamRoutes';
 import socialRoutes from './routes/socialRoutes';
 import aiRoutes from './routes/aiRoutes';
 import adminRoutes from './routes/adminRoutes';
+import tournamentRoutes from './routes/tournamentRoutes';
 
 export const createApp = (): Express => {
   const app = express();
@@ -45,6 +46,7 @@ export const createApp = (): Express => {
   app.use('/api/quizzes', quizRoutes);
   app.use('/api/govt-exams', govtExamRoutes);
   app.use('/api/social', socialRoutes);
+  app.use('/api/tournaments', tournamentRoutes);
   app.use('/api/ai', aiRoutes);
   app.use('/api/admin', adminRoutes);
 

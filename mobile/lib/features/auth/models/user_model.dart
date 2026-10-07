@@ -38,6 +38,63 @@ class UserStats {
       };
 }
 
+class PlayerArchetype {
+  final String name;
+  final String label;
+  final String icon;
+  final String description;
+
+  PlayerArchetype({
+    required this.name,
+    required this.label,
+    required this.icon,
+    required this.description,
+  });
+
+  factory PlayerArchetype.fromJson(Map<String, dynamic>? json) {
+    if (json == null) {
+      return PlayerArchetype(
+        name: 'Specialist',
+        label: 'Focused Competitor',
+        icon: '🔬',
+        description: 'Dominates specialized high-yield drills.',
+      );
+    }
+    return PlayerArchetype(
+      name: json['name'] ?? 'Specialist',
+      label: json['label'] ?? 'Focused Competitor',
+      icon: json['icon'] ?? '🔬',
+      description: json['description'] ?? '',
+    );
+  }
+}
+
+class PlayerAchievement {
+  final String id;
+  final String name;
+  final String description;
+  final String icon;
+  final bool isUnlocked;
+
+  PlayerAchievement({
+    required this.id,
+    required this.name,
+    required this.description,
+    required this.icon,
+    required this.isUnlocked,
+  });
+
+  factory PlayerAchievement.fromJson(Map<String, dynamic> json) {
+    return PlayerAchievement(
+      id: json['id'] ?? '',
+      name: json['name'] ?? '',
+      description: json['description'] ?? '',
+      icon: json['icon'] ?? '🏆',
+      isUnlocked: json['isUnlocked'] == true,
+    );
+  }
+}
+
 class UserModel {
   final String id;
   final String username;
@@ -53,7 +110,11 @@ class UserModel {
   final int rating;
   final int xpProgress;
   final int nextLevelXp;
+  final int followersCount;
+  final int followingCount;
   final UserStats stats;
+  final PlayerArchetype archetype;
+  final List<PlayerAchievement> achievements;
 
   UserModel({
     required this.id,
@@ -70,8 +131,20 @@ class UserModel {
     this.rating = 1200,
     this.xpProgress = 0,
     this.nextLevelXp = 100,
+    this.followersCount = 0,
+    this.followingCount = 0,
     UserStats? stats,
-  }) : stats = stats ?? UserStats();
+    PlayerArchetype? archetype,
+    List<PlayerAchievement>? achievements,
+  })  : stats = stats ?? UserStats(),
+        archetype = archetype ??
+            PlayerArchetype(
+              name: 'Specialist',
+              label: 'Focused Competitor',
+              icon: '🔬',
+              description: 'Dominates specialized high-yield drills.',
+            ),
+        achievements = achievements ?? [];
 
   factory UserModel.fromJson(Map<String, dynamic> json) {
     return UserModel(
@@ -89,7 +162,14 @@ class UserModel {
       rating: json['rating'] ?? 1200,
       xpProgress: json['xpProgress'] ?? 0,
       nextLevelXp: json['nextLevelXp'] ?? 100,
+      followersCount: json['followersCount'] ?? 0,
+      followingCount: json['followingCount'] ?? 0,
       stats: UserStats.fromJson(json['stats']),
+      archetype: PlayerArchetype.fromJson(json['archetype']),
+      achievements: (json['achievements'] as List?)
+              ?.map((a) => PlayerAchievement.fromJson(Map<String, dynamic>.from(a)))
+              .toList() ??
+          [],
     );
   }
 
@@ -108,6 +188,8 @@ class UserModel {
         'rating': rating,
         'xpProgress': xpProgress,
         'nextLevelXp': nextLevelXp,
+        'followersCount': followersCount,
+        'followingCount': followingCount,
         'stats': stats.toJson(),
       };
 }
