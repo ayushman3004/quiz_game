@@ -40,6 +40,24 @@ export const createApp = (): Express => {
     });
   });
 
+  // Root status and welcome endpoint
+  app.get(['/', '/api'], (_req, res) => {
+    res.status(200).json({
+      name: 'QuizVerse API',
+      status: 'healthy',
+      version: '1.0.0',
+      message: 'QuizVerse Backend is live and running!',
+      endpoints: {
+        health: '/health',
+        auth: '/api/auth',
+        quizzes: '/api/quizzes',
+        tournaments: '/api/tournaments',
+        creators: '/api/quizzes/creators',
+        social: '/api/social',
+      },
+    });
+  });
+
   // REST API Routes
   app.use('/api/auth', authRoutes);
   app.use('/api/users', userRoutes);
@@ -49,6 +67,14 @@ export const createApp = (): Express => {
   app.use('/api/tournaments', tournamentRoutes);
   app.use('/api/ai', aiRoutes);
   app.use('/api/admin', adminRoutes);
+
+  // 404 handler for unhandled routes
+  app.use((req, res) => {
+    res.status(404).json({
+      error: 'Not Found',
+      message: `Cannot ${req.method} ${req.url}`,
+    });
+  });
 
   // Global Error Handler
   app.use(errorHandler);

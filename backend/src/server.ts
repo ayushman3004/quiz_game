@@ -20,6 +20,16 @@ const initServerless = async () => {
   }
 };
 
+// Serverless middleware to ensure DB connection on every request
+app.use(async (_req, _res, next) => {
+  try {
+    await initServerless();
+  } catch (e) {
+    console.error('Serverless DB middleware error:', e);
+  }
+  next();
+});
+
 // Traditional standalone server (local dev / Docker / VPS)
 if (!process.env.VERCEL) {
   const startServer = async () => {
@@ -50,10 +60,6 @@ if (!process.env.VERCEL) {
   });
 }
 
-// Serverless function handler for Vercel
-export default async function handler(req: any, res: any) {
-  await initServerless();
-  return app(req, res);
-}
-
+// Serverless entry point for Vercel
+export default app;
 export { app };

@@ -4,7 +4,6 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.app = void 0;
-exports.default = handler;
 const http_1 = __importDefault(require("http"));
 const socket_io_1 = require("socket.io");
 const app_1 = require("./app");
@@ -26,6 +25,16 @@ const initServerless = async () => {
         }
     }
 };
+// Serverless middleware to ensure DB connection on every request
+app.use(async (_req, _res, next) => {
+    try {
+        await initServerless();
+    }
+    catch (e) {
+        console.error('Serverless DB middleware error:', e);
+    }
+    next();
+});
 // Traditional standalone server (local dev / Docker / VPS)
 if (!process.env.VERCEL) {
     const startServer = async () => {
@@ -50,8 +59,5 @@ if (!process.env.VERCEL) {
         console.error('Fatal startup error:', err);
     });
 }
-// Serverless function handler for Vercel
-async function handler(req, res) {
-    await initServerless();
-    return app(req, res);
-}
+// Serverless entry point for Vercel
+exports.default = app;
